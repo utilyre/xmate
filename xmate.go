@@ -4,6 +4,7 @@ package xmate
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"net/http"
 )
 
@@ -17,14 +18,14 @@ func WriteText(w http.ResponseWriter, code int, body string) error {
 	return err
 }
 
-// WriteHTML writes body to w along with a proper header for text/html.
-func WriteHTML(w http.ResponseWriter, code int, body string) error {
+// WriteHTML writes the template associated with t that has the given name to w
+// along with a proper header for text/html.
+func WriteHTML(w http.ResponseWriter, t *template.Template, code int, name string, data any) error {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 	w.WriteHeader(code)
 
-	_, err := fmt.Fprint(w, body)
-	return err
+	return t.ExecuteTemplate(w, name, data)
 }
 
 // A Map represents arbitrary JSON data.
