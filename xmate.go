@@ -8,7 +8,8 @@ import (
 	"net/http"
 )
 
-// WriteText writes body to w along with a proper header for text/plain.
+// WriteText writes body to w along with a proper header for text/plain mime
+// type.
 func WriteText(w http.ResponseWriter, code int, body string) error {
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
@@ -19,7 +20,7 @@ func WriteText(w http.ResponseWriter, code int, body string) error {
 }
 
 // WriteHTML writes the template associated with t that has the given name to w
-// along with a proper header for text/html.
+// along with a proper header for text/html mime type.
 func WriteHTML(w http.ResponseWriter, t *template.Template, code int, name string, data any) error {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
@@ -31,7 +32,8 @@ func WriteHTML(w http.ResponseWriter, t *template.Template, code int, name strin
 // A Map represents arbitrary JSON data.
 type Map map[string]any
 
-// WriteJSON writes body to w along with a proper header for application/json.
+// WriteJSON writes body to w along with a proper header for application/json
+// mime type.
 func WriteJSON(w http.ResponseWriter, code int, body any) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
