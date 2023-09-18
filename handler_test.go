@@ -32,8 +32,8 @@ func handleEcho(w http.ResponseWriter, r *http.Request) error {
 
 	w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
 	w.WriteHeader(http.StatusOK)
-	w.Write(body)
-	return nil
+	_, err = w.Write(body)
+	return err
 }
 
 func TestErrorHandler(t *testing.T) {
