@@ -19,7 +19,7 @@ func (f HandlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) error {
 	return f(w, r)
 }
 
-// A ErrorHandler responds to an HTTP request when an error occurs in the chain.
+// An ErrorHandler responds to an HTTP request when an error occurs in the chain.
 type ErrorHandler func(w http.ResponseWriter, r *http.Request)
 
 // Handle converts a Handler to http.Handler by handling its error.

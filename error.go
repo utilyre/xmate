@@ -2,7 +2,7 @@ package xmate
 
 import "net/http"
 
-// A HTTPError represents a custom HTTP error.
+// An HTTPError represents a custom HTTP error.
 type HTTPError struct {
 	Code    int
 	Message string
