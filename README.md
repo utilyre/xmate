@@ -11,3 +11,15 @@
         Package xmate provides missing convenient functionality for net/http.
     </p>
 </div>
+
+## Examples
+
+See [examples][examples] directory.
+
+[examples]: https://github.com/utilyre/xmate/tree/main/examples
+
+## License
+
+[Apache-2.0][apache-2]
+
+[apache-2]: https://www.apache.org/licenses/LICENSE-2.0
