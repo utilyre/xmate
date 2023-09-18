@@ -24,15 +24,19 @@ type ErrorHandler func(w http.ResponseWriter, r *http.Request)
 
 // Handle converts a Handler to http.Handler by handling its error.
 func (eh ErrorHandler) Handle(next Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return eh.handle(next)
+}
+
+// HandleFunc converts a HandlerFunc to http.HandlerFunc by handling its error.
+func (eh ErrorHandler) HandleFunc(next HandlerFunc) http.HandlerFunc {
+	return eh.handle(next)
+}
+
+func (eh ErrorHandler) handle(next Handler) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
 		if err := next.ServeHTTP(w, r); err != nil {
 			r2 := r.WithContext(context.WithValue(r.Context(), "error", err))
 			eh(w, r2)
 		}
-	})
-}
-
-// HandleFunc converts a HandlerFunc to http.Handler by handling its error.
-func (eh ErrorHandler) HandleFunc(next HandlerFunc) http.Handler {
-	return eh.Handle(next)
+	}
 }
