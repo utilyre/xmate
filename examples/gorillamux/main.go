@@ -37,7 +37,7 @@ func NewRouter() Router {
 	return Router{
 		router: mux.NewRouter(),
 		errorHandler: func(w http.ResponseWriter, r *http.Request) {
-			err := r.Context().Value("error").(error)
+			err := r.Context().Value(xmate.KeyError{}).(error)
 
 			httpErr := new(xmate.HTTPError)
 			if !errors.As(err, &httpErr) {
