@@ -19,14 +19,14 @@ func WriteText(w http.ResponseWriter, code int, body string) error {
 	return err
 }
 
-// WriteHTML writes the template associated with t that has the given name to w
+// WriteHTML applies data to the template associated with t and writes it to w
 // along with a proper header for text/html mime type.
-func WriteHTML(w http.ResponseWriter, t *template.Template, code int, name string, data any) error {
+func WriteHTML(w http.ResponseWriter, t *template.Template, code int, data any) error {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 	w.WriteHeader(code)
 
-	return t.ExecuteTemplate(w, name, data)
+	return t.Execute(w, data)
 }
 
 // A Map represents arbitrary JSON data.
