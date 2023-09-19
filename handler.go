@@ -5,8 +5,8 @@ import (
 	"net/http"
 )
 
-// A KeyError associates error values in request's contexts.
-type KeyError struct{}
+// A ErrorKey associates error values in request's contexts.
+type ErrorKey struct{}
 
 // A Handler responds to an HTTP request.
 type Handler interface {
@@ -38,7 +38,7 @@ func (eh ErrorHandler) HandleFunc(next HandlerFunc) http.HandlerFunc {
 func (eh ErrorHandler) handle(next Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if err := next.ServeHTTP(w, r); err != nil {
-			r2 := r.WithContext(context.WithValue(r.Context(), KeyError{}, err))
+			r2 := r.WithContext(context.WithValue(r.Context(), ErrorKey{}, err))
 			eh(w, r2)
 		}
 	}
