@@ -1,25 +1,45 @@
-<div align="center">
-    <h1>
-        X Mate
-        <br />
-        <a href="https://github.com/utilyre/xmate/blob/main/.github/workflows/go.yml"><img alt="Unit Tests" src="https://img.shields.io/github/actions/workflow/status/utilyre/xmate/go.yml?label=Unit%20Tests" /></a>
-        <a href="https://github.com/utilyre/xmate/blob/main/.github/workflows/golangci-lint.yml"><img alt="Lint" src="https://img.shields.io/github/actions/workflow/status/utilyre/xmate/golangci-lint.yml?label=Lint" /></a>
-        <a href="https://github.com/utilyre/xmate/issues"><img alt="Issues" src="https://img.shields.io/github/issues/utilyre/xmate?label=Issues" /></a>
-        <a href="https://github.com/utilyre/xmate/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/utilyre/xmate?label=License" /></a>
-    </h1>
-    <p>
-        Package xmate provides missing convenient functionality for net/http.
-    </p>
-</div>
+# xmate
 
-## Examples
+Package xmate provides missing convenient functionality for net/http.
 
-See [examples][examples] directory.
+## Usage
+
+You'll probably want to make a custom router type which takes care of wrapping
+your handlers with type `xmate.ErrorHandler`, for which see the
+[examples][examples] folder.
+
+However here is a basic example
+
+```go
+package main
+
+import (
+    "errors"
+    "net/http"
+
+    "github.com/utilyre/xmate"
+)
+
+func main() {
+    mux := http.NewServeMux()
+    eh := xmate.ErrorHandler(func(w http.ResponseWriter, r *http.Request) {
+        err := r.Context().Value(xmate.ErrorKey{}).(error)
+
+        httpErr := new(xmate.HTTPError)
+        if !errors.As(err, &httpErr) {
+            httpErr.Code = http.StatusInternalServerError
+            httpErr.Message = http.StatusText(httpErr.Code)
+        }
+
+        http.Error(w, httpErr.Message, httpErr.Code)
+    })
+
+    mux.HandleFunc("/", eh.HandleFunc(func(w http.ResponseWriter, r *http.Request) error {
+        return xmate.WriteText(w, http.StatusOK, "Hello world!")
+    }))
+
+    http.ListenAndServe(":3000", mux)
+}
+```
 
 [examples]: https://github.com/utilyre/xmate/tree/main/examples
-
-## License
-
-[Apache-2.0][apache-2]
-
-[apache-2]: https://www.apache.org/licenses/LICENSE-2.0
