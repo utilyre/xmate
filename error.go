@@ -9,8 +9,10 @@ type HTTPError struct {
 }
 
 // NewHTTPError returns a new HTTP error instance.
+//
+// If message is not provided, http.StatusText(code) will be used.
 func NewHTTPError(code int, message ...string) error {
-	msg := ""
+	var msg string
 	if len(message) > 0 {
 		msg = message[0]
 	} else {
