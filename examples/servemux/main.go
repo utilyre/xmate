@@ -32,7 +32,7 @@ func NewRouter() Router {
 			httpErr := new(xmate.HTTPError)
 			if !errors.As(err, &httpErr) {
 				httpErr.Code = http.StatusInternalServerError
-				httpErr.Message = http.StatusText(httpErr.Code)
+				httpErr.Message = "Internal Server Error"
 
 				log.Printf("%s %s failed: %s\n", r.Method, r.URL.Path, err)
 			}

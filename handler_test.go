@@ -14,7 +14,7 @@ func handleError(w http.ResponseWriter, r *http.Request) {
 	httpErr := new(HTTPError)
 	if !errors.As(err, &httpErr) {
 		httpErr.Code = http.StatusInternalServerError
-		httpErr.Message = http.StatusText(httpErr.Code)
+		httpErr.Message = "Internal Server Error"
 	}
 
 	WriteText(w, httpErr.Code, httpErr.Message)

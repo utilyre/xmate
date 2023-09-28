@@ -28,7 +28,7 @@ func main() {
 		httpErr := new(xmate.HTTPError)
 		if !errors.As(err, &httpErr) {
 			httpErr.Code = http.StatusInternalServerError
-			httpErr.Message = http.StatusText(httpErr.Code)
+			httpErr.Message = "Internal Server Error"
 		}
 
 		xmate.WriteText(w, httpErr.Code, httpErr.Message)
