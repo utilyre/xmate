@@ -16,6 +16,7 @@ package main
 import (
 	"errors"
 	"net/http"
+	"log"
 
 	"github.com/utilyre/xmate"
 )
@@ -29,9 +30,13 @@ func main() {
 		if !errors.As(err, &httpErr) {
 			httpErr.Code = http.StatusInternalServerError
 			httpErr.Message = "Internal Server Error"
+
+			log.Printf("%s %s failed: %s\n", r.Method, r.URL.Path, err)
 		}
 
-		xmate.WriteText(w, httpErr.Code, httpErr.Message)
+		if err := xmate.WriteText(w, httpErr.Code, httpErr.Message); err != nil {
+			log.Printf("%s %s failed to write error response: %s\n", r.Method, r.URL.Path, err)
+		}
 	})
 
 	mux.HandleFunc("/", eh.HandleFunc(func(w http.ResponseWriter, r *http.Request) error {

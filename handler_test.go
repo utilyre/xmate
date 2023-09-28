@@ -17,7 +17,7 @@ func handleError(w http.ResponseWriter, r *http.Request) {
 		httpErr.Message = "Internal Server Error"
 	}
 
-	WriteText(w, httpErr.Code, httpErr.Message)
+	_ = WriteText(w, httpErr.Code, httpErr.Message)
 }
 
 func handleEcho(w http.ResponseWriter, r *http.Request) error {
