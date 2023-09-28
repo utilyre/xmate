@@ -37,7 +37,7 @@ func NewRouter() Router {
 				log.Printf("%s %s failed: %s\n", r.Method, r.URL.Path, err)
 			}
 
-			http.Error(w, httpErr.Message, httpErr.Code)
+			xmate.WriteText(w, httpErr.Code, httpErr.Message)
 		},
 	}
 }

@@ -31,7 +31,7 @@ func main() {
 			httpErr.Message = http.StatusText(httpErr.Code)
 		}
 
-		http.Error(w, httpErr.Message, httpErr.Code)
+		xmate.WriteText(w, httpErr.Code, httpErr.Message)
 	})
 
 	mux.HandleFunc("/", eh.HandleFunc(func(w http.ResponseWriter, r *http.Request) error {

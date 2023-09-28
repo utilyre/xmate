@@ -17,7 +17,7 @@ func handleError(w http.ResponseWriter, r *http.Request) {
 		httpErr.Message = http.StatusText(httpErr.Code)
 	}
 
-	http.Error(w, httpErr.Message, httpErr.Code)
+	WriteText(w, httpErr.Code, httpErr.Message)
 }
 
 func handleEcho(w http.ResponseWriter, r *http.Request) error {
