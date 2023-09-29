@@ -29,9 +29,6 @@ func WriteHTML(w http.ResponseWriter, t *template.Template, code int, body any) 
 	return t.Execute(w, body)
 }
 
-// A Map represents JSON object.
-type Map map[string]any
-
 // WriteJSON writes body to w along with a proper header for application/json
 // mime type.
 func WriteJSON(w http.ResponseWriter, code int, body any) error {
