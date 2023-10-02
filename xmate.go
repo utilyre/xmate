@@ -8,33 +8,33 @@ import (
 	"net/http"
 )
 
-// WriteText writes body to w along with a proper header for text/plain mime
+// WriteText writes data to w along with a proper header for text/plain mime
 // type.
-func WriteText(w http.ResponseWriter, code int, body string) error {
+func WriteText(w http.ResponseWriter, code int, data string) error {
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 	w.WriteHeader(code)
 
-	_, err := fmt.Fprintln(w, body)
+	_, err := fmt.Fprintln(w, data)
 	return err
 }
 
-// WriteHTML applies body to the template associated with t and writes it to w
-// along with a proper header for text/html mime type.
-func WriteHTML(w http.ResponseWriter, t *template.Template, code int, body any) error {
+// WriteHTML applies data to t and writes it to w along with a proper header for
+// text/html mime type.
+func WriteHTML(w http.ResponseWriter, t *template.Template, code int, data any) error {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 	w.WriteHeader(code)
 
-	return t.Execute(w, body)
+	return t.Execute(w, data)
 }
 
-// WriteJSON writes body to w along with a proper header for application/json
+// WriteJSON writes data to w along with a proper header for application/json
 // mime type.
-func WriteJSON(w http.ResponseWriter, code int, body any) error {
+func WriteJSON(w http.ResponseWriter, code int, data any) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 	w.WriteHeader(code)
 
-	return json.NewEncoder(w).Encode(body)
+	return json.NewEncoder(w).Encode(data)
 }
