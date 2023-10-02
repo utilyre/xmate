@@ -2,6 +2,7 @@
 package xmate
 
 import (
+	"encoding/gob"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -37,4 +38,13 @@ func WriteJSON(w http.ResponseWriter, code int, data any) error {
 	w.WriteHeader(code)
 
 	return json.NewEncoder(w).Encode(data)
+}
+
+// WriteGob writes data to w along with a proper header for
+// application/octet-stream mime type.
+func WriteGob(w http.ResponseWriter, code int, data any) error {
+	w.Header().Set("Content-Type", "application/octet-stream")
+	w.WriteHeader(code)
+
+	return gob.NewEncoder(w).Encode(data)
 }
