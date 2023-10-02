@@ -23,7 +23,7 @@ func main() {
 
 	mux.HandleFunc("/", eh.HandleFunc(handleIndex))
 
-	http.ListenAndServe(":3000", mux)
+	http.ListenAndServe(":8080", mux)
 }
 
 func handleError(w http.ResponseWriter, r *http.Request) {

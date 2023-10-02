@@ -9,23 +9,23 @@ import (
 )
 
 type Router struct {
-	mux          *http.ServeMux
-	errorHandler xmate.ErrorHandler
+	mux *http.ServeMux
+	eh  xmate.ErrorHandler
 }
 
-func NewRouter(errorHandler xmate.ErrorHandler) *Router {
+func NewRouter(eh xmate.ErrorHandler) *Router {
 	return &Router{
-		mux:          http.NewServeMux(),
-		errorHandler: errorHandler,
+		mux: http.NewServeMux(),
+		eh:  eh,
 	}
 }
 
 func (r *Router) Handle(pattern string, handler xmate.Handler) {
-	r.mux.Handle(pattern, r.errorHandler.Handle(handler))
+	r.mux.Handle(pattern, r.eh.Handle(handler))
 }
 
 func (r *Router) HandleFunc(pattern string, handler xmate.HandlerFunc) {
-	r.mux.HandleFunc(pattern, r.errorHandler.HandleFunc(handler))
+	r.mux.HandleFunc(pattern, r.eh.HandleFunc(handler))
 }
 
 func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
@@ -35,7 +35,7 @@ func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 func Example() {
 	r := NewRouter(handleError)
 	r.HandleFunc("/", handleIndex)
-	log.Fatal(http.ListenAndServe(":3000", r))
+	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
 func handleError(w http.ResponseWriter, r *http.Request) {
