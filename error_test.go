@@ -24,7 +24,7 @@ func TestNewHTTPError(t *testing.T) {
 	}
 }
 
-func TestHTTPErrorIs(t *testing.T) {
+func TestHTTPError_Is(t *testing.T) {
 	err1 := NewHTTPError(http.StatusForbidden, "you do not have the privileges to access this endpoint")
 	err2 := NewHTTPError(http.StatusForbidden, "you are not allowed")
 
