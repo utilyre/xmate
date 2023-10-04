@@ -33,9 +33,5 @@ func (e *HTTPError) Error() string {
 // Is checks whether e and target have the same code.
 func (e *HTTPError) Is(target error) bool {
 	httpErr, ok := target.(*HTTPError)
-	if !ok {
-		return false
-	}
-
-	return e.Code == httpErr.Code
+	return ok && e.Code == httpErr.Code
 }
