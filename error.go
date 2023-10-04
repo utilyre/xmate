@@ -30,8 +30,8 @@ func (e *HTTPError) Error() string {
 	return e.Message
 }
 
-// Is checks whether e and target have the same code.
+// Is checks whether e and target have the same code and message.
 func (e *HTTPError) Is(target error) bool {
 	httpErr, ok := target.(*HTTPError)
-	return ok && e.Code == httpErr.Code
+	return ok && (e.Code == httpErr.Code && e.Message == httpErr.Message)
 }
