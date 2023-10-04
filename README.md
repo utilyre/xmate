@@ -34,11 +34,11 @@ func handleError(w http.ResponseWriter, r *http.Request) {
 		httpErr.Code = http.StatusInternalServerError
 		httpErr.Message = "Internal Server Error"
 
-		log.Printf("%s %s failed: %s\n", r.Method, r.URL.Path, err)
+		log.Printf("%s %s failed: %v\n", r.Method, r.URL.Path, err)
 	}
 
 	if err := xmate.WriteText(w, httpErr.Code, httpErr.Message); err != nil {
-		log.Printf("%s %s failed to write error response: %s\n", r.Method, r.URL.Path, err)
+		log.Printf("%s %s failed to write error response: %v\n", r.Method, r.URL.Path, err)
 	}
 }
 
