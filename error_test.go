@@ -12,7 +12,7 @@ func TestNewHTTPError(t *testing.T) {
 		t.Errorf("httpErr.Code = %d; want %d", httpErr.Code, http.StatusNotFound)
 	}
 	if httpErr.Message != "user with email not found" {
-		t.Errorf("httpErr.Message = '%s'; want 'user with email not found'", httpErr.Error())
+		t.Errorf("httpErr.Message = '%s'; want 'user with email not found'", httpErr.Message)
 	}
 
 	httpErr = NewHTTPError(http.StatusInternalServerError).(*HTTPError)
@@ -20,7 +20,7 @@ func TestNewHTTPError(t *testing.T) {
 		t.Errorf("httpErr.Code = %d; want %d", httpErr.Code, http.StatusInternalServerError)
 	}
 	if httpErr.Message != "Internal Server Error" {
-		t.Errorf("httpErr.Message = '%s'; want 'Internal Server Error'", httpErr.Error())
+		t.Errorf("httpErr.Message = '%s'; want 'Internal Server Error'", httpErr.Message)
 	}
 }
 
