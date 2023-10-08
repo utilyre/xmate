@@ -29,17 +29,13 @@ func main() {
 func handleError(w http.ResponseWriter, r *http.Request) {
 	err := r.Context().Value(xmate.ErrorKey{}).(error)
 
-	httpErr := new(xmate.HTTPError)
-	if !errors.As(err, &httpErr) {
-		httpErr.Code = http.StatusInternalServerError
-		httpErr.Message = "Internal Server Error"
-
-		log.Printf("%s %s failed: %v\n", r.Method, r.URL.Path, err)
+	if httpErr := new(xmate.HTTPError); errors.As(err, &httpErr) {
+		_ = xmate.WriteText(w, httpErr.Code, httpErr.Message)
+		return
 	}
 
-	if err := xmate.WriteText(w, httpErr.Code, httpErr.Message); err != nil {
-		log.Printf("%s %s failed to write error response: %v\n", r.Method, r.URL.Path, err)
-	}
+	log.Printf("%s %s failed: %v\n", r.Method, r.URL.Path, err)
+	_ = xmate.WriteText(w, http.StatusInternalServerError, "Internal Server Error")
 }
 
 func handleIndex(w http.ResponseWriter, r *http.Request) error {
