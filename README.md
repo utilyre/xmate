@@ -23,7 +23,7 @@ func main() {
 
 	mux.HandleFunc("/", eh.HandleFunc(handleIndex))
 
-	http.ListenAndServe(":8080", mux)
+	log.Fatal(http.ListenAndServe(":8080", mux))
 }
 
 func handleError(w http.ResponseWriter, r *http.Request) {
