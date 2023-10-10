@@ -4,8 +4,8 @@ import "net/http"
 
 // An HTTPError represents a custom HTTP error.
 type HTTPError struct {
-	Code    int
-	Message string
+	Code    int    // status code
+	Message string // response message
 }
 
 // NewHTTPError returns a new HTTP error instance.
