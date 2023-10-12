@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// A ErrorKey associates error values in request's contexts.
+// An ErrorKey associates error values in request's contexts.
 type ErrorKey struct{}
 
 // A Handler responds to an HTTP request.
