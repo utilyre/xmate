@@ -12,16 +12,16 @@ type HTTPError struct {
 //
 // If message is not provided, http.StatusText(code) will be used.
 func NewHTTPError(code int, message ...string) error {
-	var msg string
-	if len(message) > 0 {
-		msg = message[0]
-	} else {
-		msg = http.StatusText(code)
+	if len(message) == 0 {
+		return &HTTPError{
+			Code:    code,
+			Message: http.StatusText(code),
+		}
 	}
 
 	return &HTTPError{
 		Code:    code,
-		Message: msg,
+		Message: message[0],
 	}
 }
 
