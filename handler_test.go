@@ -26,7 +26,7 @@ func handleEcho(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	if len(body) == 0 {
-		return NewHTTPError(http.StatusBadRequest, "missing request body")
+		return Errorf(http.StatusBadRequest, "missing request body")
 	}
 
 	w.Header().Set("Content-Type", r.Header.Get("Content-Type"))

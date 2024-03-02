@@ -1,6 +1,6 @@
 package xmate
 
-import "net/http"
+import "fmt"
 
 // An HTTPError represents a custom HTTP error.
 type HTTPError struct {
@@ -8,20 +8,12 @@ type HTTPError struct {
 	Message string // response message
 }
 
-// NewHTTPError returns a new HTTP error instance.
-//
-// If message is not provided, http.StatusText(code) will be used.
-func NewHTTPError(code int, message ...string) error {
-	if len(message) == 0 {
-		return HTTPError{
-			Code:    code,
-			Message: http.StatusText(code),
-		}
-	}
-
+// Errorf formats according to format and returns a new HTTPError that has code
+// as its Code and the formatted string as its Message.
+func Errorf(code int, format string, a ...any) error {
 	return HTTPError{
 		Code:    code,
-		Message: message[0],
+		Message: fmt.Sprintf(format, a...),
 	}
 }
 
