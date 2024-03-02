@@ -8,28 +8,26 @@ import (
 	"github.com/utilyre/xmate"
 )
 
+type serveMux = http.ServeMux
+
 type Router struct {
-	mux *http.ServeMux
-	eh  xmate.ErrorHandler
+	*serveMux
+	handler xmate.ErrorHandler
 }
 
-func NewRouter(eh xmate.ErrorHandler) *Router {
+func NewRouter(handler xmate.ErrorHandler) *Router {
 	return &Router{
-		mux: http.NewServeMux(),
-		eh:  eh,
+		serveMux: http.NewServeMux(),
+		handler:  handler,
 	}
 }
 
 func (r *Router) Handle(pattern string, handler xmate.Handler) {
-	r.mux.Handle(pattern, r.eh.Handle(handler))
+	r.serveMux.Handle(pattern, r.handler.Handle(handler))
 }
 
 func (r *Router) HandleFunc(pattern string, handler xmate.HandlerFunc) {
-	r.mux.HandleFunc(pattern, r.eh.HandleFunc(handler))
-}
-
-func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	r.mux.ServeHTTP(w, req)
+	r.serveMux.HandleFunc(pattern, r.handler.HandleFunc(handler))
 }
 
 func Example() {
