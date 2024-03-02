@@ -13,25 +13,25 @@ type HTTPError struct {
 // If message is not provided, http.StatusText(code) will be used.
 func NewHTTPError(code int, message ...string) error {
 	if len(message) == 0 {
-		return &HTTPError{
+		return HTTPError{
 			Code:    code,
 			Message: http.StatusText(code),
 		}
 	}
 
-	return &HTTPError{
+	return HTTPError{
 		Code:    code,
 		Message: message[0],
 	}
 }
 
 // Error returns e.Message.
-func (e *HTTPError) Error() string {
+func (e HTTPError) Error() string {
 	return e.Message
 }
 
 // Is checks whether e and target have the same code and message.
-func (e *HTTPError) Is(target error) bool {
-	httpErr, ok := target.(*HTTPError)
-	return ok && (e.Code == httpErr.Code && e.Message == httpErr.Message)
+func (e HTTPError) Is(target error) bool {
+	httpErr, ok := target.(HTTPError)
+	return ok && e.Code == httpErr.Code && e.Message == httpErr.Message
 }

@@ -7,7 +7,7 @@ import (
 )
 
 func TestNewHTTPError(t *testing.T) {
-	httpErr := NewHTTPError(http.StatusNotFound, "user with email not found").(*HTTPError)
+	httpErr := NewHTTPError(http.StatusNotFound, "user with email not found").(HTTPError)
 	if httpErr.Code != http.StatusNotFound {
 		t.Errorf("httpErr.Code = %d; want %d", httpErr.Code, http.StatusNotFound)
 	}
@@ -15,7 +15,7 @@ func TestNewHTTPError(t *testing.T) {
 		t.Errorf("httpErr.Message = '%s'; want 'user with email not found'", httpErr.Message)
 	}
 
-	httpErr = NewHTTPError(http.StatusInternalServerError).(*HTTPError)
+	httpErr = NewHTTPError(http.StatusInternalServerError).(HTTPError)
 	if httpErr.Code != http.StatusInternalServerError {
 		t.Errorf("httpErr.Code = %d; want %d", httpErr.Code, http.StatusInternalServerError)
 	}
