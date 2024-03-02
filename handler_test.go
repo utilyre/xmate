@@ -9,7 +9,7 @@ import (
 )
 
 func handleError(w http.ResponseWriter, r *http.Request) {
-	err := r.Context().Value(ErrorKey{}).(error)
+	err := r.Context().Value(KeyError).(error)
 
 	if httpErr := new(HTTPError); errors.As(err, &httpErr) {
 		_ = WriteText(w, httpErr.Code, httpErr.Message)

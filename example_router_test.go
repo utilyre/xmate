@@ -39,7 +39,7 @@ func Example() {
 }
 
 func handleError(w http.ResponseWriter, r *http.Request) {
-	err := r.Context().Value(xmate.ErrorKey{}).(error)
+	err := r.Context().Value(xmate.KeyError).(error)
 
 	if httpErr := new(xmate.HTTPError); errors.As(err, &httpErr) {
 		_ = xmate.WriteText(w, httpErr.Code, httpErr.Message)
