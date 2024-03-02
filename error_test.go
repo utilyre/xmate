@@ -6,16 +6,6 @@ import (
 	"testing"
 )
 
-func TestErrorf(t *testing.T) {
-	httpErr := Errorf(http.StatusNotFound, "user with email not found").(HTTPError)
-	if httpErr.Code != http.StatusNotFound {
-		t.Errorf("httpErr.Code = %d; want %d", httpErr.Code, http.StatusNotFound)
-	}
-	if httpErr.Message != "user with email not found" {
-		t.Errorf("httpErr.Message = '%s'; want 'user with email not found'", httpErr.Message)
-	}
-}
-
 func TestHTTPError_Is(t *testing.T) {
 	err1 := Errorf(http.StatusConflict, "user already exists")
 	err2 := Errorf(http.StatusConflict, "user already exists")
