@@ -7,8 +7,10 @@ import (
 )
 
 func TestHTTPError_Is(t *testing.T) {
-	err1 := Errorf(http.StatusConflict, "user already exists")
-	err2 := Errorf(http.StatusConflict, "user already exists")
+	var err1, err2 error
+
+	err1 = Errorf(http.StatusConflict, "user already exists")
+	err2 = Errorf(http.StatusConflict, "user already exists")
 	if !errors.Is(err1, err2) {
 		t.Errorf("%#[1]v != %#[2]v; want %#[1]v = %#[2]v", err1, err2)
 	}

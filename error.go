@@ -8,9 +8,9 @@ type HTTPError struct {
 	Message string // response message
 }
 
-// Errorf formats according to format and returns a new HTTPError that has code
-// as its Code and the formatted string as its Message.
-func Errorf(code int, format string, a ...any) error {
+// Errorf formats according to a format specifier and returns the string along
+// with code as an HTTPError.
+func Errorf(code int, format string, a ...any) HTTPError {
 	return HTTPError{
 		Code:    code,
 		Message: fmt.Sprintf(format, a...),
