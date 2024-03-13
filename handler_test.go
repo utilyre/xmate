@@ -11,12 +11,13 @@ import (
 func handleError(w http.ResponseWriter, r *http.Request) {
 	err := r.Context().Value(KeyError).(error)
 
-	if httpErr := (HTTPError{}); errors.As(err, &httpErr) {
-		_ = WriteText(w, httpErr.Code, httpErr.Message)
-		return
+	var httpErr HTTPError
+	if !errors.As(err, &httpErr) {
+		httpErr.Code = http.StatusInternalServerError
+		httpErr.Message = "Internal Server Error"
 	}
 
-	_ = WriteText(w, http.StatusInternalServerError, "Internal Server Error")
+	_ = WriteText(w, httpErr.Code, httpErr.Message)
 }
 
 func handleEcho(w http.ResponseWriter, r *http.Request) error {
@@ -36,11 +37,11 @@ func handleEcho(w http.ResponseWriter, r *http.Request) error {
 }
 
 func TestErrorHandler(t *testing.T) {
-	eh := ErrorHandler(handleError)
+	handler := ErrorHandler(handleError)
 
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest(http.MethodPost, "/", nil)
-	eh.HandleFunc(handleEcho).ServeHTTP(w, r)
+	handler.HandleFunc(handleEcho).ServeHTTP(w, r)
 
 	resp := w.Result()
 	defer resp.Body.Close()

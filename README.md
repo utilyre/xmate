@@ -19,9 +19,9 @@ import (
 
 func main() {
 	mux := http.NewServeMux()
-	eh := xmate.ErrorHandler(handleError)
+	handler := xmate.ErrorHandler(handleError)
 
-	mux.HandleFunc("/", eh.HandleFunc(handleIndex))
+	mux.HandleFunc("/", handler.HandleFunc(handleIndex))
 
 	log.Fatal(http.ListenAndServe(":8080", mux))
 }
