@@ -15,7 +15,7 @@ const (
 
 // A Handler responds to an HTTP request.
 type Handler interface {
-	ServeHTTP(http.ResponseWriter, *http.Request) error
+	ServeHTTP(w http.ResponseWriter, r *http.Request) error
 }
 
 // A HandlerFunc is an adapter to allow the use of ordinary functions as HTTP
