@@ -2,7 +2,7 @@ package xmate
 
 import "fmt"
 
-// An HTTPError represents a custom HTTP error.
+// HTTPError represents a custom HTTP error.
 type HTTPError struct {
 	Code    int    // status code
 	Message string // response message
