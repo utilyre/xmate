@@ -4,10 +4,10 @@ Package xmate provides missing convenient functionality for net/http.
 
 ## Usage
 
-### Basic
+### Handlers
 
-In the simplest scenario, wrap the HTTP handlers and functional HTTP handlers
-with `xmate.Handle` and `xmate.HandleFunc`, respectively.
+In the simplest scenario, wrap HTTP handlers and functional HTTP handlers with
+`xmate.Handle` and `xmate.HandleFunc`, respectively.
 
 > [!NOTE]
 > These top-level functions convert the given HTTP handler into the standard
@@ -49,9 +49,10 @@ func (sh statusHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) error 
 }
 ```
 
-### In middleware
+### Middlewares
 
-Instead of wrapping the middleware itself, wrap the function returned from it.
+Instead of wrapping the middleware itself, wrap the function returned from it
+with `xmate.HandleFunc`.
 
 ```go
 package main
