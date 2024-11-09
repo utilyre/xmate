@@ -18,7 +18,7 @@ func Default() ErrorHandler {
 	return defaultErrorHandler.Load().(ErrorHandler)
 }
 
-// SetDefault sets the default error handler, which is used by top level
+// SetDefault sets the default error handler, which is used by top-level
 // functions Handle and HandleFunc.
 func SetDefault(eh ErrorHandler) {
 	defaultErrorHandler.Store(eh)
