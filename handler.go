@@ -2,8 +2,46 @@ package xmate
 
 import (
 	"context"
+	"errors"
 	"net/http"
+	"sync/atomic"
 )
+
+var defaultErrorHandler atomic.Value
+
+func init() {
+	defaultErrorHandler.Store(ErrorHandler(func(w http.ResponseWriter, r *http.Request) {
+		err := r.Context().Value(KeyError).(error)
+
+		if httpErr := (&HTTPError{}); errors.As(err, &httpErr) {
+			_ = WriteText(w, httpErr.Code, httpErr.Message)
+			return
+		}
+
+		_ = WriteText(w, http.StatusInternalServerError, "Internal Server Error")
+	}))
+}
+
+// Default returns the default error handler.
+func Default() ErrorHandler {
+	return defaultErrorHandler.Load().(ErrorHandler)
+}
+
+// SetDefault sets the default error handler, which is used by top level
+// functions Handle and HandleFunc.
+func SetDefault(eh ErrorHandler) {
+	defaultErrorHandler.Store(eh)
+}
+
+// Handle calls Handle on the default error handler.
+func Handle(next Handler) http.Handler {
+	return Default().Handle(next)
+}
+
+// HandleFunc calls HandleFunc on the default error handler.
+func HandleFunc(next HandlerFunc) http.HandlerFunc {
+	return Default().HandleFunc(next)
+}
 
 // Key represents a package level context key.
 type Key int
