@@ -1,7 +1,6 @@
 package xmate_test
 
 import (
-	"errors"
 	"log"
 	"net/http"
 
@@ -38,11 +37,6 @@ func Example() {
 
 func handleError(w http.ResponseWriter, r *http.Request) {
 	err := r.Context().Value(xmate.KeyError).(error)
-
-	if httpErr := (xmate.HTTPError{}); errors.As(err, &httpErr) {
-		_ = xmate.WriteText(w, httpErr.Code, httpErr.Message)
-		return
-	}
 
 	log.Printf("%s %s failed: %v\n", r.Method, r.URL.Path, err)
 	_ = xmate.WriteText(w, http.StatusInternalServerError, "Internal Server Error")

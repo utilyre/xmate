@@ -2,7 +2,6 @@ package xmate
 
 import (
 	"context"
-	"errors"
 	"net/http"
 	"sync/atomic"
 )
@@ -12,13 +11,7 @@ var defaultErrorHandler atomic.Value
 func init() {
 	defaultErrorHandler.Store(ErrorHandler(func(w http.ResponseWriter, r *http.Request) {
 		err := r.Context().Value(KeyError).(error)
-
-		if httpErr := (&HTTPError{}); errors.As(err, &httpErr) {
-			_ = WriteText(w, httpErr.Code, httpErr.Message)
-			return
-		}
-
-		_ = WriteText(w, http.StatusInternalServerError, "Internal Server Error")
+		_ = WriteText(w, http.StatusInternalServerError, err.Error())
 	}))
 }
 

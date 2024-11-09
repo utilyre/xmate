@@ -1,7 +1,6 @@
 package xmate
 
 import (
-	"errors"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -10,14 +9,7 @@ import (
 
 func handleError(w http.ResponseWriter, r *http.Request) {
 	err := r.Context().Value(KeyError).(error)
-
-	var httpErr HTTPError
-	if !errors.As(err, &httpErr) {
-		httpErr.Code = http.StatusInternalServerError
-		httpErr.Message = "Internal Server Error"
-	}
-
-	_ = WriteText(w, httpErr.Code, httpErr.Message)
+	_ = WriteText(w, http.StatusInternalServerError, err.Error())
 }
 
 func handleEcho(w http.ResponseWriter, r *http.Request) error {
@@ -27,7 +19,7 @@ func handleEcho(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	if len(body) == 0 {
-		return Errorf(http.StatusBadRequest, "missing request body")
+		return WriteText(w, http.StatusBadRequest, "missing request body")
 	}
 
 	w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
