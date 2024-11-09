@@ -7,8 +7,7 @@ import (
 	"testing"
 )
 
-func handleError(w http.ResponseWriter, r *http.Request) {
-	err := r.Context().Value(KeyError).(error)
+func handleError(w http.ResponseWriter, r *http.Request, err error) {
 	_ = WriteText(w, http.StatusInternalServerError, err.Error())
 }
 

@@ -35,9 +35,7 @@ func Example() {
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
-func handleError(w http.ResponseWriter, r *http.Request) {
-	err := r.Context().Value(xmate.KeyError).(error)
-
+func handleError(w http.ResponseWriter, r *http.Request, err error) {
 	log.Printf("%s %s failed: %v\n", r.Method, r.URL.Path, err)
 	_ = xmate.WriteText(w, http.StatusInternalServerError, "Internal Server Error")
 }

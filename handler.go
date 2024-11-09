@@ -1,7 +1,6 @@
 package xmate
 
 import (
-	"context"
 	"net/http"
 	"sync/atomic"
 )
@@ -9,8 +8,7 @@ import (
 var defaultErrorHandler atomic.Value
 
 func init() {
-	defaultErrorHandler.Store(ErrorHandler(func(w http.ResponseWriter, r *http.Request) {
-		err := r.Context().Value(KeyError).(error)
+	defaultErrorHandler.Store(ErrorHandler(func(w http.ResponseWriter, r *http.Request, err error) {
 		_ = WriteText(w, http.StatusInternalServerError, err.Error())
 	}))
 }
@@ -36,14 +34,6 @@ func HandleFunc(next HandlerFunc) http.HandlerFunc {
 	return Default().HandleFunc(next)
 }
 
-// Key represents a package level context key.
-type Key int
-
-const (
-	// KeyError is used to associate error values in a request context.
-	KeyError Key = iota + 1
-)
-
 // Handler responds to an HTTP request.
 type Handler interface {
 	ServeHTTP(w http.ResponseWriter, r *http.Request) error
@@ -59,7 +49,7 @@ func (f HandlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) error {
 }
 
 // ErrorHandler responds to an HTTP request when an error occurs in the chain.
-type ErrorHandler func(w http.ResponseWriter, r *http.Request)
+type ErrorHandler func(w http.ResponseWriter, r *http.Request, err error)
 
 // Handle converts a Handler to http.Handler by handling its error.
 func (eh ErrorHandler) Handle(next Handler) http.Handler {
@@ -74,8 +64,7 @@ func (eh ErrorHandler) HandleFunc(next HandlerFunc) http.HandlerFunc {
 func (eh ErrorHandler) handle(next Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if err := next.ServeHTTP(w, r); err != nil {
-			r2 := r.WithContext(context.WithValue(r.Context(), KeyError, err))
-			eh(w, r2)
+			eh(w, r, err)
 		}
 	}
 }
