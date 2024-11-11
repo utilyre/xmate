@@ -1,6 +1,31 @@
 # xmate
 
-Package xmate provides missing convenient functionality for net/http.
+xmate is a Go library designed to enhance the standard `net/http` package by 
+providing convenient functionality specifically focused on error handling in 
+HTTP handlers.
+
+The name "xmate" signifies "friend of mux," highlighting its role in 
+simplifying the creation of HTTP handlers. While it doesn't enhance routing in 
+the standard library, xmate makes writing handlers less verbose, allowing 
+developers to focus on building applications more efficiently and with less 
+boilerplate code.
+
+## Features
+
+- **Less Boilerplate Code**: Streamline your HTTP handler development with
+	reduced boilerplate, allowing you to write cleaner and more maintainable code.
+
+- **Error Handling**: Convert HTTP handlers that return errors into standard
+	`net/http` handlers, simplifying error management and ensuring consistent
+	responses.
+
+- **Multiple Error Handlers**: Easily define different error handlers for
+	various types of HTTP endpoints, providing tailored responses based on the
+	specific context of each request.
+
+- **Ease of Use**: Enjoy a user-friendly experience that simplifies the process
+	of creating and managing HTTP handlers, making it accessible for developers
+	of all skill levels.
 
 ## Usage
 
