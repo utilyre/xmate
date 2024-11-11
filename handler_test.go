@@ -1,14 +1,16 @@
-package xmate
+package xmate_test
 
 import (
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/utilyre/xmate/v3"
 )
 
 func handleError(w http.ResponseWriter, r *http.Request, err error) {
-	_ = WriteText(w, http.StatusInternalServerError, err.Error())
+	_ = xmate.WriteText(w, http.StatusInternalServerError, err.Error())
 }
 
 func handleEcho(w http.ResponseWriter, r *http.Request) error {
@@ -18,7 +20,7 @@ func handleEcho(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	if len(body) == 0 {
-		return WriteText(w, http.StatusBadRequest, "missing request body")
+		return xmate.WriteText(w, http.StatusBadRequest, "missing request body")
 	}
 
 	w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
@@ -28,11 +30,11 @@ func handleEcho(w http.ResponseWriter, r *http.Request) error {
 }
 
 func TestErrorHandler(t *testing.T) {
-	handler := ErrorHandler(handleError)
+	eh := xmate.ErrorHandler(handleError)
 
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest(http.MethodPost, "/", nil)
-	handler.HandleFunc(handleEcho).ServeHTTP(w, r)
+	eh.HandleFunc(handleEcho).ServeHTTP(w, r)
 
 	resp := w.Result()
 	defer resp.Body.Close()

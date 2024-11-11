@@ -5,23 +5,25 @@ import (
 	"sync/atomic"
 )
 
-var defaultErrorHandler atomic.Value
+var defaultEH atomic.Value
 
 func init() {
-	defaultErrorHandler.Store(ErrorHandler(func(w http.ResponseWriter, r *http.Request, err error) {
-		_ = WriteText(w, http.StatusInternalServerError, err.Error())
-	}))
+	defaultEH.Store(ErrorHandler(handleError))
+}
+
+func handleError(w http.ResponseWriter, r *http.Request, err error) {
+	_ = WriteText(w, http.StatusInternalServerError, err.Error())
 }
 
 // Default returns the default error handler.
 func Default() ErrorHandler {
-	return defaultErrorHandler.Load().(ErrorHandler)
+	return defaultEH.Load().(ErrorHandler)
 }
 
 // SetDefault sets the default error handler, which is used by top-level
 // functions Handle and HandleFunc.
 func SetDefault(eh ErrorHandler) {
-	defaultErrorHandler.Store(eh)
+	defaultEH.Store(eh)
 }
 
 // Handle calls Handle on the default error handler.
