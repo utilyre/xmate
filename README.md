@@ -52,7 +52,10 @@ import (
 func main() {
 	mux := http.NewServeMux()
 
-	sh := statusHandler{}
+	sh := statusHandler{
+		Brief:       "healthy",
+		Description: "service is ready to accept connections",
+	}
 
 	mux.HandleFunc("GET /{$}", xmate.HandleFunc(handleHelloWorld))
 	mux.Handle("GET /status", xmate.Handle(sh))
@@ -64,12 +67,15 @@ func handleHelloWorld(w http.ResponseWriter, r *http.Request) error {
 	return xmate.WriteText(w, http.StatusOK, "hello world")
 }
 
-type statusHandler struct{}
+type statusHandler struct {
+	Brief       string
+	Description string
+}
 
 func (sh statusHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) error {
 	return xmate.WriteJSON(w, http.StatusOK, map[string]any{
-		"status": "healthy",
-		"description": "service is ready to accept connections.",
+		"brief":       sh.Brief,
+		"description": sh.Description,
 	})
 }
 ```
