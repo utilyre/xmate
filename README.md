@@ -62,7 +62,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/utilyre/xmate/v2"
+	"github.com/utilyre/xmate/v3"
 )
 
 func main() {
@@ -89,4 +89,43 @@ func AssertJSON(next http.Handler) http.Handler {
 
 ### Multiple error handlers
 
-TODO
+Error handling may need to vary in different contexts. That's why you can
+always instantiate a non-default error handler and use it on your HTTP handlers.
+
+```go
+package main
+
+import (
+	"log"
+	"net/http"
+
+	"github.com/utilyre/xmate/v3"
+)
+
+func main() {
+	mux := http.NewServeMux()
+
+	xmate.SetDefault(handleError) // changes the error handler used by top-level functions
+	apiEH := xmate.ErrorHandler(handleAPIError) // custom handler for API routes
+
+	mux.HandleFunc("GET /signup", xmate.HandleFunc(handleSignUpPage))
+	mux.HandleFunc("GET /login", xmate.HandleFunc(handleLoginPage))
+
+	mux.Handle("GET /api/v1/auth/signup", apiEH.HandleFunc(handleSignUp))
+	mux.Handle("GET /api/v1/auth/login", apiEH.HandleFunc(handleLogin))
+
+	log.Fatal(http.ListenAndServe(":8080", mux))
+}
+
+func handleError(w http.ResponseWriter, r *http.Request, err error) {
+	log.Printf("Failed to %s %s: %v", r.Method, r.URL.Path, err)
+	_ = xmate.WriteText(w, http.StatusInternalServerError, "Internal Server Error")
+}
+
+func handleAPIError(w http.ResponseWriter, r *http.Request, err error) {
+	log.Printf("Failed to %s %s: %v", r.Method, r.URL.Path, err)
+	_ = xmate.WriteJSON(w, http.StatusInternalServerError, map[string]any{
+		"message": "Internal Server Error",
+	})
+}
+```
